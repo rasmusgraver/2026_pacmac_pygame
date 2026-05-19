@@ -5,7 +5,8 @@ from board import Board
 
 class PacMan:
     IMAGE_FILE = Path(__file__).parent / "sprites" / "pacman2.png"
-    FRAMES_PER_MOVE = TILE_SIZE
+    PIXELS_PER_MOVE = 2
+    FRAMES_PER_MOVE = TILE_SIZE // PIXELS_PER_MOVE
 
     def getImageSpriteList(self, x_start, y_start, num_frames) -> list[pg.Surface]:
         full_image = pg.image.load(self.IMAGE_FILE)
@@ -52,6 +53,14 @@ class PacMan:
         elif keys[pg.K_DOWN]:
             self.next_direction = (0, 1)
 
+        # Hvis vi står midt i ruta og neste retning er fri, bytt retning.
+        if self.offset == (0, 0) and self.next_direction != (0, 0):
+            nx, ny = self.next_direction
+            if not self.board.is_wall(self.col + nx, self.row + ny):
+                self.direction = self.next_direction
+                self.next_direction = (0, 0)
+                self.venstre = self.direction[0] < 0
+
 
         # Endrer offset ut i fra direction:
         dx, dy = self.direction
@@ -83,7 +92,7 @@ class PacMan:
         mid = TILE_SIZE // 2
         ox, oy = self.offset
         rect = current_frame_image.get_rect()
-        rect.center = (self.col * TILE_SIZE + mid + ox , self.row * TILE_SIZE + mid + oy)
+        rect.center = (self.col * TILE_SIZE + mid + ox*self.PIXELS_PER_MOVE , self.row * TILE_SIZE + mid + oy*self.PIXELS_PER_MOVE)
 
         # Blit images på skjermen (der self.rect befinner seg):
         surface.blit(current_frame_image, rect)
