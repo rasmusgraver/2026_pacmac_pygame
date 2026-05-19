@@ -35,8 +35,8 @@ class Board:
                     pg.draw.rect(surface, DARK_BLUE, rect, border_radius=5)
 
 
-    def is_road(self, x: int, y: int) -> bool:
+    def is_wall(self, col: int, row: int) -> bool:
         """Returnerer True hvis posisjonen er fri for vegg."""
-        if x < 0 or x >= self.cols or y < 0 or y >= self.rows:
+        if col < 0 or col >= self.cols or row < 0 or row >= self.rows:
             return False
-        return self.grid[y][x] != '#'
+        return self.grid[row][col] == '#'

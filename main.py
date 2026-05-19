@@ -9,7 +9,7 @@ vindu = pg.display.set_mode(board.window_size())
 clock = pg.time.Clock()
 
 
-pacman = PacMan(3, 4)
+pacman = PacMan(4, 3, board)
 
 running = True
 while running:
@@ -25,8 +25,8 @@ while running:
     # Tegn brettet først, og pacman og andre ting "oppå":
     board.draw(vindu)
 
-    # TODO: Oppdater objektene våre:
-
+    # Oppdater objektene våre:
+    pacman.update()
 
     # Tegn objektene våre:
     pacman.draw(vindu)
