@@ -25,6 +25,7 @@ class PacMan:
         self.col = col
         self.board = board
         self.direction = (1,0)
+        self.next_direction = (0,0)
         self.offset = (0,0) 
         # Holder styr på hvor langt vi "offsetter" i ruta når vi tegner oss selv
 
@@ -40,10 +41,23 @@ class PacMan:
 
 
     def update(self):
+        # Sjekk om brukeren trykker piltast og sett neste retning.
+        keys = pg.key.get_pressed()
+        if keys[pg.K_LEFT]:
+            self.next_direction = (-1, 0)
+        elif keys[pg.K_RIGHT]:
+            self.next_direction = (1, 0)
+        elif keys[pg.K_UP]:
+            self.next_direction = (0, -1)
+        elif keys[pg.K_DOWN]:
+            self.next_direction = (0, 1)
+
+
         # Endrer offset ut i fra direction:
         dx, dy = self.direction
         self.offset = (self.offset[0] + dx, self.offset[1] + dy)
         self.framecounter += 1
+
         # Sjekk om vi krasjer i en vegg:
         if self.board.is_wall(self.col + dx, self.row + dy):
             self.offset = (0, 0)
