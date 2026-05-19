@@ -8,9 +8,11 @@ class PacMan:
     PIXELS_PER_MOVE = 2
     FRAMES_PER_MOVE = TILE_SIZE // PIXELS_PER_MOVE
 
-    def getImageSpriteList(self, x_start, y_start, num_frames) -> list[pg.Surface]:
+    def getImageSpriteList(self, col:int, row:int, num_frames:int) -> list[pg.Surface]:
         full_image = pg.image.load(self.IMAGE_FILE)
         frame_width = 16
+        x_start = col*frame_width
+        y_start = row*frame_width
         
         # Dele opp bildet i frames, som lagres i en liste:
         frames = []
@@ -30,15 +32,17 @@ class PacMan:
         self.offset = (0,0) 
         # Holder styr på hvor langt vi "offsetter" i ruta når vi tegner oss selv
 
-        self.frames_idle = self.getImageSpriteList(0, 0, 4)
-        # Bildet vi skal vise til å starte med er idle:
-        self.frames = self.frames_idle
+        self.frames_right = self.getImageSpriteList(0, 0, 2)
+        self.frames_down = self.getImageSpriteList(0, 3, 2)
+        # Bildet vi skal vise til å starte med:
+        self.frames = self.frames_right
         # Om vi vil ha animasjon som går gjennom frames:
         self.current_frame = 0
         self.framecounter = 0
 
         # Om vi vil speile bildet:
         self.venstre = False
+        self.up = False
 
 
     def update(self):
@@ -60,6 +64,11 @@ class PacMan:
                 self.direction = self.next_direction
                 self.next_direction = (0, 0)
                 self.venstre = self.direction[0] < 0
+                self.up = self.direction[1] < 0
+                if self.direction[0] != 0:
+                    self.frames = self.frames_right
+                else:
+                    self.frames = self.frames_down
 
 
         # Endrer offset ut i fra direction:
@@ -87,6 +96,8 @@ class PacMan:
         # Speiler bildet hvis det trengs:
         if self.venstre:
             current_frame_image = pg.transform.flip(current_frame_image, True, False)
+        if self.up:
+            current_frame_image = pg.transform.flip(current_frame_image, False, True)
 
         # Sørg for at vi tegner midt i "Tile":
         mid = TILE_SIZE // 2
