@@ -58,6 +58,7 @@ class PacMan:
             self.next_direction = (0, 1)
 
         # Hvis vi står midt i ruta og neste retning er fri, bytt retning.
+        # Skaper veldig hoppende bevegelse uten den offsett == 0,0 ! if self.next_direction != (0, 0):
         if self.offset == (0, 0) and self.next_direction != (0, 0):
             nx, ny = self.next_direction
             if not self.board.is_wall(self.col + nx, self.row + ny):
@@ -71,21 +72,31 @@ class PacMan:
                     self.frames = self.frames_down
 
 
-        # Endrer offset ut i fra direction:
-        dx, dy = self.direction
-        self.offset = (self.offset[0] + dx, self.offset[1] + dy)
-        self.framecounter += 1
+        if self.direction != (0,0):
+            # Endrer offset ut i fra direction:
+            dx, dy = self.direction
+            self.offset = (self.offset[0] + dx, self.offset[1] + dy)
+            self.framecounter += 1
 
-        # Sjekk om vi krasjer i en vegg:
-        if self.board.is_wall(self.col + dx, self.row + dy):
-            self.offset = (0, 0)
-            self.framecounter = 0
+            # Sjekk om vi krasjer i en vegg:
+            if self.board.is_wall(self.col + dx, self.row + dy):
+                self.offset = (0, 0)
+                self.framecounter = 0
+                self.current_frame = 0
+                self.direction = (0,0)
 
-        if self.framecounter > self.FRAMES_PER_MOVE:
-            self.offset = (0, 0)
-            self.framecounter = 0
-            self.col += dx
-            self.row += dy
+            if self.framecounter > self.FRAMES_PER_MOVE:
+                self.offset = (0, 0)
+                self.framecounter = 0
+                self.current_frame = 0
+                self.col += dx
+                self.row += dy
+
+            # Og sprite animasjon:
+            if self.framecounter > 0 and self.framecounter % (self.FRAMES_PER_MOVE // 2) == 0:
+                self.current_frame += 1
+                self.current_frame %= len(self.frames) # Passer på holder oss innafor antall bilder tilgjengelig
+
 
 
     def draw(self, surface):
