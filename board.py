@@ -4,6 +4,14 @@ from constants import *
 class Board:
 
     boardStr = [
+        "###########",
+        "#.........#",
+        "#.##.##.#.#",
+        "#.........#",
+        "###########",
+    ]
+
+    boardStrLarge = [
         "#################",
         "#...##.....##...#",
         "#.#.###.###.#.#.#",
@@ -22,12 +30,12 @@ class Board:
     ]
     
     def __init__(self):
-
         # Lag en liste av lister:
         self.grid = [list(row) for row in self.boardStr]
 
         self.rows = len(self.grid)
         self.cols = len(self.grid[0])
+        self.won = False # Sjekker om all maten er spist
 
     def window_size(self):
         # Legger på litt plass under brettet, til liv og poeng etc
@@ -42,7 +50,7 @@ class Board:
                     pg.draw.rect(surface, DARK_BLUE, rect, border_radius=5)
                 elif tile == '.':
                     center = (x * TILE_SIZE + TILE_SIZE // 2, y * TILE_SIZE + TILE_SIZE // 2)
-                    pg.draw.circle(surface, YELLOW, center, radius=5)
+                    pg.draw.circle(surface, YELLOW, center, radius=3)
 
 
     def is_wall(self, col: int, row: int) -> bool:
@@ -58,5 +66,14 @@ class Board:
         if self.grid[row][col] == '.':
             # Spis, og return True, så det teller som poeng
             self.grid[row][col] = ' '
+            self.won = self.food_empty()
             return True
         return False
+
+    def food_empty(self):
+        # Sjekk om all maten på brettet er spist:
+        for y, row in enumerate(self.grid):
+            for x, tile in enumerate(row):
+                if tile == ".":
+                    return False
+        return True

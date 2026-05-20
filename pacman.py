@@ -48,6 +48,11 @@ class PacMan:
 
 
     def update(self):
+
+        if self.board.won:
+            # Stopp bevegelse om all maten er spist
+            return
+
         # Sjekk om brukeren trykker piltast og sett neste retning.
         keys = pg.key.get_pressed()
         if keys[pg.K_LEFT]:
@@ -95,7 +100,6 @@ class PacMan:
                 self.row += dy
                 if self.board.visit(self.col, self.row):
                     self.points += 10
-                    print("Yes! Poeng", self.points)
 
             # Og sprite animasjon:
             if self.framecounter > 0 and self.framecounter % (self.FRAMES_PER_MOVE // 2) == 0:
@@ -105,7 +109,6 @@ class PacMan:
 
 
     def draw(self, surface):
-
         # Få bildet fra en liste av bilder (om du vil bruke animasjon/sprites):
         current_frame_image = self.frames[self.current_frame]
         
