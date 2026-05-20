@@ -29,8 +29,10 @@ class PacMan:
         self.board = board
         self.direction = (1,0)
         self.next_direction = (0,0)
-        self.offset = (0,0) 
+        self.offset = (0,0)
         # Holder styr på hvor langt vi "offsetter" i ruta når vi tegner oss selv
+
+        self.points = 0 # starter med 0 poeng
 
         self.frames_right = self.getImageSpriteList(0, 0, 2)
         self.frames_down = self.getImageSpriteList(0, 3, 2)
@@ -91,6 +93,9 @@ class PacMan:
                 self.current_frame = 0
                 self.col += dx
                 self.row += dy
+                if self.board.visit(self.col, self.row):
+                    self.points += 10
+                    print("Yes! Poeng", self.points)
 
             # Og sprite animasjon:
             if self.framecounter > 0 and self.framecounter % (self.FRAMES_PER_MOVE // 2) == 0:

@@ -8,8 +8,12 @@ board = Board()
 vindu = pg.display.set_mode(board.window_size())
 clock = pg.time.Clock()
 
-
 pacman = PacMan(4, 3, board)
+
+
+def draw_points():
+    pass
+
 
 running = True
 while running:
@@ -24,6 +28,7 @@ while running:
 
     # Tegn brettet først, og pacman og andre ting "oppå":
     board.draw(vindu)
+    draw_points()
 
     # Oppdater objektene våre:
     pacman.update()
