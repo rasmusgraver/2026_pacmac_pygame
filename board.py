@@ -3,7 +3,7 @@ from constants import *
 
 class Board:
 
-    boardStr = [
+    boardStrsmall = [
         "###########",
         "#.........#",
         "#.##.##.#.#",
@@ -11,7 +11,7 @@ class Board:
         "###########",
     ]
 
-    boardStrLarge = [
+    boardStr = [
         "#################",
         "#...##.....##...#",
         "#.#.###.###.#.#.#",
